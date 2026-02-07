@@ -10,7 +10,7 @@ import java.time.LocalDate;
  * To be implemented with appropriate fields and methods.
  */
 @Entity
-@Table(name = "Health_Metrics")
+@Table(name = "health_metrics")
 @Getter
 public class HealthMetrics {
 
