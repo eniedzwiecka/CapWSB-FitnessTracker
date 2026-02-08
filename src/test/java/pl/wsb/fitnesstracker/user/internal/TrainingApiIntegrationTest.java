@@ -16,7 +16,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import static java.time.LocalDate.now;
-import static java.util.UUID.randomUUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.log;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -74,15 +73,20 @@ class TrainingApiIntegrationTest extends IntegrationTestBase {
                 .andExpect(jsonPath("$[0].endTime").value(sdf.format(training1.getEndTime())))
                 .andExpect(jsonPath("$[0].distance").value((training1.getDistance())))
                 .andExpect(jsonPath("$[0].averageSpeed").value(training1.getAverageSpeed()))
-
                 .andExpect(jsonPath("$[1]").doesNotExist());
-        ;
+
     }
 
 
     private static User generateClient() {
-        return new User(randomUUID().toString(), randomUUID().toString(), now(), randomUUID().toString());
+        return new User(
+                "Jan",
+                "Kowalski",
+                now(),
+                "jan.kowalski+" + System.nanoTime() + "@example.com"
+        );
     }
+
 
     private static Training generateTraining(User user) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

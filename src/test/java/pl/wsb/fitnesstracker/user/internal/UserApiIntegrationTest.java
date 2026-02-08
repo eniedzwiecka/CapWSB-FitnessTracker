@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static java.time.format.DateTimeFormatter.ISO_DATE;
+import static java.time.LocalDate.now;
 import static java.util.UUID.randomUUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
@@ -31,7 +32,7 @@ class UserApiIntegrationTest extends IntegrationTestBase {
     private MockMvc mockMvc;
 
     public static User generateUser() {
-        return new User(randomUUID().toString(), randomUUID().toString(), LocalDate.now(), randomUUID().toString());
+        return new User(randomUUID().toString(), randomUUID().toString(), now(), randomUUID().toString());
     }
 
     private static User generateUserWithDate(LocalDate date) {
