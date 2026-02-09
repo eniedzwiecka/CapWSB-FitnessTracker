@@ -5,9 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-
 import java.time.LocalDate;
-
 
 @Entity
 @Table(name = "users")
@@ -41,9 +39,13 @@ public class User {
     public Long getId() { return id; }
     public String getFirstName() { return firstName; }
     public String getLastName() { return lastName; }
-    public String getEmail() { return email; }
     public LocalDate getBirthdate() { return birthdate; }
-}
+    public String getEmail() { return email; }
 
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setBirthdate(LocalDate birthdate) { this.birthdate = birthdate; }
+    public void setEmail(String email) { this.email = email; }
+}
 
 
