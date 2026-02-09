@@ -1,16 +1,10 @@
 package pl.wsb.fitnesstracker.user.api;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "users")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString
 public class User {
 
     @Id
@@ -26,8 +20,11 @@ public class User {
     @Column(name = "birthdate", nullable = false)
     private LocalDate birthdate;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    protected User() {
+    }
 
     public User(String firstName, String lastName, LocalDate birthdate, String email) {
         this.firstName = firstName;
@@ -36,16 +33,40 @@ public class User {
         this.email = email;
     }
 
-    public Long getId() { return id; }
-    public String getFirstName() { return firstName; }
-    public String getLastName() { return lastName; }
-    public LocalDate getBirthdate() { return birthdate; }
-    public String getEmail() { return email; }
+    public Long getId() {
+        return id;
+    }
 
-    public void setFirstName(String firstName) { this.firstName = firstName; }
-    public void setLastName(String lastName) { this.lastName = lastName; }
-    public void setBirthdate(LocalDate birthdate) { this.birthdate = birthdate; }
-    public void setEmail(String email) { this.email = email; }
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
-
 

@@ -7,9 +7,11 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
+
+    List<User> findByEmailContainingIgnoreCase(String emailFragment);
 
     List<User> findAllByBirthdateBefore(LocalDate time);
 }
