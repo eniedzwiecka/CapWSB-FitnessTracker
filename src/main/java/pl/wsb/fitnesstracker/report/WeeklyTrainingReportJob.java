@@ -1,5 +1,7 @@
 package pl.wsb.fitnesstracker.report;
 
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.wsb.fitnesstracker.training.api.Training;
@@ -18,16 +20,22 @@ public class WeeklyTrainingReportJob {
 
     private final UserRepository userRepository;
     private final TrainingRepository trainingRepository;
+    private final JavaMailSender mailSender;
 
-    public WeeklyTrainingReportJob(UserRepository userRepository, TrainingRepository trainingRepository) {
+    public WeeklyTrainingReportJob(
+            UserRepository userRepository,
+            TrainingRepository trainingRepository,
+            JavaMailSender mailSender
+    ) {
         this.userRepository = userRepository;
         this.trainingRepository = trainingRepository;
+        this.mailSender = mailSender;
     }
 
     @Scheduled(cron = "0 0 9 * * MON")
-    public void printWeeklyReportToConsole() {
-        LocalDate today = LocalDate.now();
+    public void weeklyReport() {
 
+        LocalDate today = LocalDate.now();
         LocalDate weekStart = today.with(DayOfWeek.MONDAY);
         LocalDate weekEnd = today.with(DayOfWeek.SUNDAY);
 
@@ -43,6 +51,7 @@ public class WeeklyTrainingReportJob {
         System.out.println("=======================================");
 
         for (User user : users) {
+
             List<Training> trainings = trainingRepository.findAllByUser_Id(user.getId());
 
             long trainingsThisWeek = trainings.stream()
@@ -53,8 +62,31 @@ public class WeeklyTrainingReportJob {
 
             System.out.println("- " + user.getFirstName() + " " + user.getLastName()
                     + " | trainings this week: " + trainingsThisWeek);
+
+            sendEmail(
+                    user.getEmail(),
+                    "FitnessTracker - Training report",
+                    "Hello " + user.getFirstName() + " " + user.getLastName()
+                            + "\n\nTotal trainings registered: " + trainings.size()
+                            + "\nTrainings this week: " + trainingsThisWeek
+                            + "\nWeek: " + weekStart + " - " + weekEnd
+                            + "\n\nRegards,\nFitnessTracker"
+            );
         }
 
         System.out.println("=======================================");
+    }
+
+    private void sendEmail(String to, String subject, String body) {
+        if (to == null || to.isBlank()) {
+            return;
+        }
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+
+        mailSender.send(message);
     }
 }
